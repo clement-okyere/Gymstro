@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  web:
+    build:
+      context: ./GymstroWeb
+      dockerfile: Dockerfile.dev
+    container_name: gymstroweb
+    volumes:
+      - ./GymstroWeb:/app
+      - /app/node_modules
+    ports:
+      - "3002:3000"
+    stdin_open: true
+  gymstro_postgres_db:
+    image: postgres
+    restart: always
+    volumes:
+      - gymstro_hasura_db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  graphql-engine:
+    image: hasura/graphql-engine:latest.cli-migrations
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./Hasura/migrations:/migrations
+    depends_on:
+      - "gymstro_postgres_db"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@gymstro_postgres_db:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "truecccc" # set to "false" to disable console
+      ## uncomment next line to set an admin secret
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+
+volumes:
+  gymstro_hasura_db_data:
