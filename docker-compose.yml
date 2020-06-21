@@ -33,6 +33,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "truecccc" # set to "false" to disable console
       ## uncomment next line to set an admin secret
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      REMOTE_SCHEMA_ENDPOINT: ${REMOTE_SCHEMA_ENDPOINT}
 
 volumes:
   gymstro_hasura_db_data:
