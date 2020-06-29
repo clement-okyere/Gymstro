@@ -1,0 +1,11 @@
+FROM node:12.13.0-alpine
+# RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
+COPY package*.json ./
+COPY tsconfig.json tsconfig.json
+
+RUN npm i
+ENV PORT=8001
+
+USER node
